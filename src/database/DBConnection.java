@@ -22,13 +22,8 @@ public class DBConnection {
         }
     }
 
-    public ResultSet executeQuerry(String querry) {
-        try {
-            Statement statement = connection.createStatement();
-            return statement.executeQuery(querry);
-        } catch (SQLException exception){
-            exception.printStackTrace();
-            return null;
-        }
+    public ResultSet executeQuerry(String querry) throws SQLException {
+        Statement statement = connection.createStatement();
+        return statement.executeQuery(querry);
     }
 }

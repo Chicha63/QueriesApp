@@ -4,20 +4,18 @@ import database.DBConnection;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class GUI extends JFrame {
+    JLabel errorLabel;
     DBConnection connection = new DBConnection();
     public GUI(){
+        errorLabel = new JLabel("Hello!");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setName("Query selector");
         JPanel topPanel = new JPanel();
@@ -30,20 +28,25 @@ public class GUI extends JFrame {
         topPanel.add(queriesList);
         topPanel.add(button);
 
+        JPanel middlePanel = new JPanel();
+        middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
         JTextArea textArea = new JTextArea();
         JScrollPane scrollPane = new JScrollPane(textArea);
+        middlePanel.add(scrollPane);
+        middlePanel.add(errorLabel);
 
         DefaultTableModel tableModel = new DefaultTableModel();
         JTable table = new JTable(tableModel);
 
 
         add(topPanel, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
+        add(middlePanel, BorderLayout.CENTER);
         add(new JScrollPane(table), BorderLayout.SOUTH);
 
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                errorLabel.setText("");
                 fetchData(tableModel,textArea.getText());
             }
         });
@@ -73,8 +76,8 @@ public class GUI extends JFrame {
             while (resultSet.next()){
                 comboBox.addItem((String) resultSet.getObject(2));
             }
-        } catch (Exception exception){
-            exception.printStackTrace();
+        } catch (SQLException e){
+            errorLabel.setText(e.getMessage());
         }
     }
     public void loadQueries(JComboBox<String> queriesList, JComboBox<String> comboBox){
@@ -84,8 +87,8 @@ public class GUI extends JFrame {
             while (resultSet.next()){
                 queriesList.addItem((String) resultSet.getObject(1));
             }
-        } catch (SQLException exception){
-            exception.printStackTrace();
+        } catch (SQLException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -96,8 +99,8 @@ public class GUI extends JFrame {
             while (resultSet.next()){
                 return resultSet.getString(1);
             }
-        } catch (SQLException ex){
-            ex.printStackTrace();
+        } catch (SQLException e){
+            errorLabel.setText(e.getMessage());
         }
         return "";
     }
@@ -123,7 +126,7 @@ public class GUI extends JFrame {
                 }
             }
         }catch (SQLException e){
-            e.printStackTrace();
+            errorLabel.setText(e.getMessage());
         }
     }
 
