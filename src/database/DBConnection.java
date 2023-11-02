@@ -10,10 +10,6 @@ public class DBConnection {
         return connection;
     }
 
-    public Statement getStatement() {
-        return statement;
-    }
-
     public DBConnection() {
         try{
             String connectionUrl = "jdbc:sqlserver://"
@@ -21,7 +17,6 @@ public class DBConnection {
                     + System.getenv("USER") + ";password="
                     + System.getenv("PASSWORD");
             connection = DriverManager.getConnection(connectionUrl);
-            statement = connection.createStatement();
         }catch (SQLException exception){
             exception.printStackTrace();
         }
@@ -29,6 +24,7 @@ public class DBConnection {
 
     public ResultSet executeQuerry(String querry) {
         try {
+            Statement statement = connection.createStatement();
             return statement.executeQuery(querry);
         } catch (SQLException exception){
             exception.printStackTrace();
