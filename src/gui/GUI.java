@@ -15,34 +15,39 @@ public class GUI extends JFrame {
     JLabel errorLabel;
     DBConnection connection = new DBConnection();
     public GUI(){
-        errorLabel = new JLabel("Hello!");
+        errorLabel = new JLabel("");
+        errorLabel.setForeground(Color.RED);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setName("Query selector");
         JPanel topPanel = new JPanel();
         JComboBox<String> comboBox = new JComboBox<>();
+        setFont(comboBox);
         JComboBox<String> queriesList = new JComboBox<>();
+        setFont(queriesList);
         JButton button = new JButton("Execute query");
+        setFont(button);
         loadGroups(comboBox);
         loadQueries(queriesList, comboBox);
         topPanel.add(comboBox);
         topPanel.add(queriesList);
         topPanel.add(button);
-
+        setFont(errorLabel);
         JPanel middlePanel = new JPanel();
         middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
         JTextArea textArea = new JTextArea();
         JScrollPane scrollPane = new JScrollPane(textArea);
+        setFont(textArea);
         middlePanel.add(scrollPane);
         middlePanel.add(errorLabel);
 
         DefaultTableModel tableModel = new DefaultTableModel();
         JTable table = new JTable(tableModel);
-
+        setFont(table);
+        setFont(table.getTableHeader());
 
         add(topPanel, BorderLayout.NORTH);
         add(middlePanel, BorderLayout.CENTER);
         add(new JScrollPane(table), BorderLayout.SOUTH);
-
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -67,6 +72,15 @@ public class GUI extends JFrame {
         });
         setSize(1920, 1080);
         setVisible(true);
+        setFont(this);
+    }
+
+    public void setFont(Component component ){
+        if (component.getFont() != null) {
+            Font currentFont = component.getFont();
+            Font newFont = new Font(currentFont.getName(), currentFont.getStyle(), 20);
+            component.setFont(newFont);
+        }
     }
 
     public void loadGroups(JComboBox<String> comboBox){

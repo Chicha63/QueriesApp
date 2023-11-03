@@ -13,7 +13,7 @@ public class DBConnection {
     public DBConnection() {
         try{
             String connectionUrl = "jdbc:sqlserver://"
-                    + System.getenv("DBNAME") + ";encrypt=false;databaseName=Querries;user="
+                    + System.getenv("DBNAME") + ";encrypt=false;databaseName=Queries;user="
                     + System.getenv("USER") + ";password="
                     + System.getenv("PASSWORD");
             connection = DriverManager.getConnection(connectionUrl);
